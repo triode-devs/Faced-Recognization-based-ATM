@@ -7,7 +7,7 @@
     <div class="w-full max-w-sm space-y-8">
         <!-- Back Button -->
         <a href="{{ url_for('dashboard') }}" class="inline-flex items-center gap-2 text-xs font-bold text-gray-500 uppercase tracking-widest hover:text-zinc-900 transition-colors">
-            <span class="iconify text-lg" data-icon="mdi:arrow-left"></span>
+            <i data-lucide="arrow-left" class="w-5 h-5"></i>
             Return to Home
         </a>
 
@@ -15,7 +15,7 @@
         <div class="bg-white border border-gray-100 rounded-[40px] p-8 shadow-2xl space-y-8">
             <div class="text-center">
                 <div class="h-16 w-16 mx-auto mb-4 rounded-3xl {% if tx_type == 'withdraw' %}bg-red-50 text-red-600{% else %}bg-green-50 text-green-600{% endif %} flex items-center justify-center">
-                    <span class="iconify text-3xl" data-icon="{% if tx_type == 'withdraw' %}mdi:cash-minus{% else %}mdi:cash-plus{% endif %}"></span>
+                    <i data-lucide="{% if tx_type == 'withdraw' %}arrow-down-left{% else %}arrow-up-right{% endif %}" class="w-8 h-8"></i>
                 </div>
                 <h2 class="text-2xl font-extrabold text-zinc-900 capitalize">{{ tx_type }} Funds</h2>
                 <p class="text-xs text-gray-400 mt-1 uppercase font-bold tracking-widest">Available Balance: ₹{{ "{:,.2f}".format(account.balance) }}</p>
@@ -52,7 +52,7 @@
                         class="w-full h-16 rounded-3xl {% if tx_type == 'withdraw' %}bg-zinc-900 shadow-zinc-900/20{% else %}bg-green-600 shadow-green-600/20{% endif %} text-white font-bold text-lg shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2"
                     >
                         <span>Confirm {{ tx_type.title() }}</span>
-                        <span class="iconify text-xl opacity-50" data-icon="mdi:check-bold"></span>
+                        <i data-lucide="check-circle" class="w-5 h-5"></i>
                     </button>
                 </div>
             </form>
