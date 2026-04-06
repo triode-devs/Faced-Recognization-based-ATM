@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}ATM Card Entry{% endblock %}
+
+{% block content %}
+<div class="flex min-h-screen items-center justify-center p-6 bg-[#09090b]">
+    <div class="w-full max-w-sm space-y-8 animate-in fade-in duration-700">
+        <!-- Logo/Icon Section -->
+        <div class="flex flex-col items-center">
+            <div class="h-16 w-16 mb-4 flex items-center justify-center rounded-3xl bg-blue-600 shadow-2xl shadow-blue-500/20 ring-4 ring-white/5">
+                <span class="iconify text-3xl text-white" data-icon="mdi:bank"></span>
+            </div>
+            <h2 class="text-2xl font-extrabold text-white">TrustPay ATM</h2>
+            <p class="text-xs font-semibold text-gray-500 tracking-wider uppercase mt-1">Insert Card Number to Begin</p>
+        </div>
+
+        <!-- Form Section -->
+        <div class="glass-card !bg-white/5 !border-white/5 rounded-[40px] p-8 shadow-2xl">
+            <form action="{{ url_for('verify_card') }}" method="POST" class="space-y-6">
+                <div class="space-y-2">
+                    <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-2">16-Digit Card Number</label>
+                    <div class="relative group">
+                        <span class="absolute left-5 top-1/2 -translate-y-1/2 iconify text-xl text-gray-500 group-focus-within:text-blue-500 transition-colors" data-icon="mdi:credit-card-outline"></span>
+                        <input 
+                            type="text" 
+                            name="card_number" 
+                            maxlength="19" 
+                            placeholder="XXXX XXXX XXXX XXXX"
+                            required
+                            oninput="formatCard(this)"
+                            class="w-full h-16 rounded-3xl bg-zinc-900 border border-white/5 pl-14 pr-4 text-xl font-bold text-white tracking-widest outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-zinc-700"
+                        >
+                    </div>
+                </div>
+
+                <button 
+                    type="submit"
+                    class="group relative w-full h-16 rounded-3xl bg-white text-zinc-900 font-bold text-lg shadow-xl hover:bg-gray-100 active:scale-95 transition-all overflow-hidden"
+                >
+                    <div class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-blue-500/10 to-transparent transition-transform duration-700 group-hover:translate-x-full"></div>
+                    <div class="flex items-center justify-center gap-2">
+                        <span>Continue to Scan</span>
+                        <span class="iconify text-xl text-zinc-900/40 group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform" data-icon="mdi:arrow-top-right"></span>
+                    </div>
+                </button>
+            </form>
+        </div>
+
+        <!-- Help Link -->
+        <div class="text-center">
+            <a href="{{ url_for('admin_login') }}" class="text-[10px] font-bold text-gray-600 hover:text-gray-400 uppercase tracking-widest transition-colors">
+                Manager Access
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function formatCard(input) {
+        let value = input.value.replace(/\D/g, '');
+        let formatted = '';
+        for (let i = 0; i < value.length; i++) {
+            if (i > 0 && i % 4 === 0) formatted += ' ';
+            formatted += value[i];
+        }
+        input.value = formatted;
+    }
+</script>
+{% endblock %}

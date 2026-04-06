@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.venv
+/site-packages/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Project specific
+.gemini/
+*.db
+/static/faces/*.jpg
+/static/faces/*.png
+/static/unknown/*.jpg
+/static/unknown/*.png
+/extract_libs.py
+/extract_tailwind.py
+/extract_tailwind_js.py
