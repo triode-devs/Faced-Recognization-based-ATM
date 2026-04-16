@@ -121,11 +121,18 @@ def api_verify_face():
 
     try:
         img_bytes = base64.b64decode(img_b64)
-        matched, confidence, live_encoding = compare_faces(
+        matched, confidence, live_encoding, (q_ok, q_msg) = compare_faces(
             account["face_encoding"], img_bytes
         )
     except Exception as e:
-        return jsonify({"status": "error", "message": str(e)})
+        return jsonify({"status": "error", "message": f"Engine error: {str(e)}"})
+
+    # If verification failed due to quality/detection issues (not a mismatch)
+    if not matched and not q_ok:
+        return jsonify({
+            "status": "error",
+            "message": q_msg  # e.g., "No face detected" or "Too blurry"
+        })
 
     failed = account["failed_attempts"]
 
@@ -139,12 +146,12 @@ def api_verify_face():
             "message": f"Identity Verified! Confidence: {confidence:.1f}%"
         })
     else:
-        # Module 4: Unknown Face Forwarder
+        # ACTUAL MISMATCH — Incremenet failed attempts
         new_failed = failed + 1
         lock = new_failed >= 3
         update_failed_attempts(card, new_failed, lock)
 
-        # Save unknown face image
+        # Save unknown face image for security logs
         ts = datetime.now().strftime("%Y%m%d_%H%M%S")
         fname = f"unknown_{card.replace(' ','')}_{ts}.jpg"
         fpath = os.path.join(UNKNOWN_FOLDER, fname)
@@ -163,7 +170,7 @@ def api_verify_face():
         return jsonify({
             "status": "failed",
             "attempts_left": 3 - new_failed,
-            "message": f"Face not recognized. {3 - new_failed} attempt(s) remaining.",
+            "message": f"Face Mismatch! {3 - new_failed} attempt(s) remaining.",
             "forward_link": url_for("unknown_forward", card=card, _external=True)
         })
 
